@@ -2,9 +2,10 @@
 
 import { type ReactElement } from "react"
 import Link from "next/link"
-import { ArrowRight, Calendar, Droplet, Search, Users, LogOut, User } from "lucide-react"
+import { ArrowRight, Calendar, Droplet, Search, Users, LogOut, User, Heart, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/use-auth"
+import { useStats } from "@/hooks/use-stats"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +15,7 @@ import {
 
 export default function HomePage(): ReactElement {
   const { user, userData, signOut } = useAuth()
+  const { stats, isLoading, error } = useStats()
 
   const handleSignOut = async (): Promise<void> => {
     try {
@@ -88,67 +90,90 @@ export default function HomePage(): ReactElement {
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-[url('/images/blood_donation.jpg')] bg-cover bg-center py-20">
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">Donate Blood, Save Lives</h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-white/90">
-            Your donation can make a difference in someone's life. Join our community of donors today.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link href="/register">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-white">
-                Become a Donor
-              </Button>
-            </Link>
-            <Link href="/requests/new">
-              <Button size="lg" variant="outline" className="bg-white text-primary hover:bg-white/90">
-                Request Blood
-              </Button>
-            </Link>
+      <section className="relative bg-[url('/images/blood_donation.jpg')] bg-cover bg-center min-h-[100vh] flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
+        <div className="container mx-auto px-4 text-center relative z-10 max-w-5xl">
+          <div className="space-y-8">
+            <h1 className="text-7xl md:text-9xl font-bold text-white leading-tight">
+              Donate Blood,<br />
+              <span className="text-primary">Save Lives</span>
+            </h1>
+            <p className="text-2xl md:text-4xl text-white/90 leading-relaxed max-w-3xl mx-auto">
+              Your donation can make a difference in someone's life.<br />
+              Join our community of donors today.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-6 mt-12">
+              <Link href="/register">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 text-white text-xl px-12 py-8 rounded-full transform hover:scale-105 transition-all duration-300">
+                  Become a Donor
+                </Button>
+              </Link>
+              <Link href="/requests">
+                <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 text-xl px-12 py-8 rounded-full border-white transform hover:scale-105 transition-all duration-300">
+                  Request Blood
+                </Button>
+              </Link>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-center gap-8 mt-16">
+              <Link 
+                href="/blood-types" 
+                className="text-white/80 hover:text-white flex items-center justify-center group"
+              >
+                <span className="text-xl">Learn about Blood Types</span>
+                <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link 
+                href="/how-it-works" 
+                className="text-white/80 hover:text-white flex items-center justify-center group"
+              >
+                <span className="text-xl">How It Works</span>
+                <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-muted">
+      {/* How It Works Section */}
+      <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-primary" />
+            <Link href="/register" className="group">
+              <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                  <User className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Register</h3>
+                <p className="text-gray-600">Create your account and join our community of donors.</p>
               </div>
-              <h3 className="text-xl font-semibold mb-3">Register</h3>
-              <p className="text-muted-foreground mb-4">
-                Create your account as a donor or acceptor and complete your profile.
-              </p>
-              <Link href="/register" className="text-primary hover:underline inline-flex items-center">
-                Register Now <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Search className="h-8 w-8 text-primary" />
+            </Link>
+            <Link href="/donors" className="group">
+              <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                  <Search className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Find Donors</h3>
+                <p className="text-gray-600">Search for blood donors based on type and location.</p>
               </div>
-              <h3 className="text-xl font-semibold mb-3">Find Donors</h3>
-              <p className="text-muted-foreground mb-4">Search for eligible donors based on blood type and location.</p>
-              <Link href="/donors" className="text-primary hover:underline inline-flex items-center">
-                Find Donors <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Calendar className="h-8 w-8 text-primary" />
+            </Link>
+            <Link href="/appointments" className="group">
+              <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                  <Calendar className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Schedule</h3>
+                <p className="text-gray-600">Book your donation appointment at a convenient time.</p>
               </div>
-              <h3 className="text-xl font-semibold mb-3">Schedule</h3>
-              <p className="text-muted-foreground mb-4">
-                Book appointments for donation or request blood for emergencies.
-              </p>
-              <Link href="/appointments" className="text-primary hover:underline inline-flex items-center">
-                Schedule Now <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </div>
+            </Link>
+          </div>
+          <div className="text-center mt-8">
+            <Link
+              href="/how-it-works"
+              className="inline-block bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+            >
+              Learn More About the Process
+            </Link>
           </div>
         </div>
       </section>
@@ -158,21 +183,129 @@ export default function HomePage(): ReactElement {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <h3 className="text-4xl font-bold mb-2">1,200+</h3>
-              <p className="text-white/80">Registered Donors</p>
+              {isLoading ? (
+                <div className="animate-pulse">
+                  <div className="h-10 bg-white/20 rounded mb-2"></div>
+                  <div className="h-4 bg-white/20 rounded"></div>
+                </div>
+              ) : error ? (
+                <div className="text-white/80">
+                  <h3 className="text-4xl font-bold mb-2">-</h3>
+                  <p className="text-white/80">Registered Donors</p>
+                </div>
+              ) : (
+                <>
+                  <h3 className="text-4xl font-bold mb-2">{stats.registeredDonors}+</h3>
+                  <p className="text-white/80">Registered Donors</p>
+                </>
+              )}
             </div>
             <div>
-              <h3 className="text-4xl font-bold mb-2">850+</h3>
-              <p className="text-white/80">Successful Donations</p>
+              {isLoading ? (
+                <div className="animate-pulse">
+                  <div className="h-10 bg-white/20 rounded mb-2"></div>
+                  <div className="h-4 bg-white/20 rounded"></div>
+                </div>
+              ) : error ? (
+                <div className="text-white/80">
+                  <h3 className="text-4xl font-bold mb-2">-</h3>
+                  <p className="text-white/80">Successful Donations</p>
+                </div>
+              ) : (
+                <>
+                  <h3 className="text-4xl font-bold mb-2">{stats.successfulDonations}+</h3>
+                  <p className="text-white/80">Successful Donations</p>
+                </>
+              )}
             </div>
             <div>
-              <h3 className="text-4xl font-bold mb-2">400+</h3>
-              <p className="text-white/80">Lives Saved</p>
+              {isLoading ? (
+                <div className="animate-pulse">
+                  <div className="h-10 bg-white/20 rounded mb-2"></div>
+                  <div className="h-4 bg-white/20 rounded"></div>
+                </div>
+              ) : error ? (
+                <div className="text-white/80">
+                  <h3 className="text-4xl font-bold mb-2">-</h3>
+                  <p className="text-white/80">Lives Saved</p>
+                </div>
+              ) : (
+                <>
+                  <h3 className="text-4xl font-bold mb-2">{stats.livesSaved}+</h3>
+                  <p className="text-white/80">Lives Saved</p>
+                </>
+              )}
             </div>
             <div>
-              <h3 className="text-4xl font-bold mb-2">50+</h3>
-              <p className="text-white/80">Partner Hospitals</p>
+              {isLoading ? (
+                <div className="animate-pulse">
+                  <div className="h-10 bg-white/20 rounded mb-2"></div>
+                  <div className="h-4 bg-white/20 rounded"></div>
+                </div>
+              ) : error ? (
+                <div className="text-white/80">
+                  <h3 className="text-4xl font-bold mb-2">-</h3>
+                  <p className="text-white/80">Partner Hospitals</p>
+                </div>
+              ) : (
+                <>
+                  <h3 className="text-4xl font-bold mb-2">{stats.partnerHospitals}+</h3>
+                  <p className="text-white/80">Partner Hospitals</p>
+                </>
+              )}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Donate Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Why Donate Blood?</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <Heart className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Save Lives</h3>
+              <p className="text-gray-600">One donation can save up to three lives. Your blood can help patients in critical need.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <Shield className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Health Benefits</h3>
+              <p className="text-gray-600">Regular donation helps maintain healthy iron levels and reduces the risk of heart disease.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <Users className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Community Impact</h3>
+              <p className="text-gray-600">Join a community of donors and make a lasting impact on your local healthcare system.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Emergency Section */}
+      <section className="py-16 bg-red-50">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6">Emergency Blood Need?</h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            If you're in urgent need of blood, our emergency response team is available 24/7.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link href="/emergency">
+              <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white text-lg px-8 py-6">
+                Emergency Request
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button size="lg" variant="outline" className="text-red-600 border-red-600 hover:bg-red-50 text-lg px-8 py-6">
+                Contact Emergency Team
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

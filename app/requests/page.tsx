@@ -92,8 +92,8 @@ export default function RequestsPage(): ReactElement {
             <Link href="/about" className="text-white hover:text-white/80 font-medium">
               About
             </Link>
-            <Link href="/donors" className="text-white hover:text-white/80 font-medium">
-              Donors
+            <Link href="/donor" className="text-white hover:text-white/80 font-medium">
+              Donor
             </Link>
             <Link href="/requests" className="text-white hover:text-white/80 font-medium">
               Requests
